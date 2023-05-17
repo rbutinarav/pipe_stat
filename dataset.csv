@@ -1,0 +1,25 @@
+Opportunity Code,Opportunity Description,Customer ID,Customer Description,Product Category,Value,%,Estimated Closing Date
+OPP001,Custom Battle Suit,C001,Iron Man,Battle Gear,50000,80,2023-06-01
+OPP002,Advanced Web-Shooters,C002,Spider-Man,Gadgets,12000,90,2023-06-02
+OPP003,Flight Training,C003,Falcon,Training,3500,70,2023-06-03
+OPP004,Shapeshifting Suit,C004,Mystique,Stealth Tech,40000,85,2023-06-04
+OPP005,Vibranium Shield Polish,C005,Captain America,Maintenance,500,95,2023-06-05
+OPP006,Quantum Tunneling Device,C006,Thor,Gadgets,55000,70,2023-06-10
+OPP007,Energy-Dampening Suit,C007,Black Panther,Battle Gear,45000,90,2023-06-15
+OPP008,Adamantium Claws Maintenance,C008,Wolverine,Maintenance,8000,80,2023-06-20
+OPP009,High-Tech Bow,C009,Hawkeye,Gadgets,7000,85,2023-06-25
+OPP010,Force Field Generator,C010,Invisible Woman,Stealth Tech,32000,90,2023-07-01
+OPP011,Arc Reactor Upgrade,C001,Iron Man,Battle Gear,60000,80,2023-07-05
+OPP012,Spider-Bot Drones,C002,Spider-Man,Gadgets,15000,75,2023-07-10
+OPP013,Aerial Combat Training,C003,Falcon,Training,4000,70,2023-07-15
+OPP014,Camouflage Tech,C004,Mystique,Stealth Tech,38000,80,2023-07-20
+OPP015,Vibranium Shield Repair,C005,Captain America,Maintenance,2000,95,2023-07-25
+OPP016,Stormbreaker Maintenance,C006,Thor,Maintenance,12000,75,2023-08-01
+OPP017,Kinetic Energy Suit,C007,Black Panther,Battle Gear,65000,92,2023-08-06
+OPP018,Healing Factor Enhancement,C008,Wolverine,Health,25000,70,2023-08-11
+OPP019,Trick Arrows,C009,Hawkeye,Gadgets,3000,80,2023-08-16
+OPP020,Telekinesis Training,C010,Invisible Woman,Training,5000,90,2023-08-21
+OPP021,Nanotech Suit,C001,Iron Man,Battle Gear,75000,85,2023-08-26
+OPP022,Web Fluid Refill,C002,Spider-Man,Maintenance,800,95,2023-08-31
+OPP023,Wing Suit Maintenance,C003,Falcon,Maintenance,3500,80,2023-09-05
+OPP024,Holographic Disguise,C004,Mystique,Stealth Tech,42000,80,2023-09-10

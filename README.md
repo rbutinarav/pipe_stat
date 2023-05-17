@@ -1,6 +1,6 @@
-# Pipe Stat: Bootstrap Analysis for Sales Pipeline
+# Pipe Stat: Montecarlo Analysis for Sales Pipeline
 
-This is a simple Streamlit app that allows you to perform bootstrap analysis on a dataset of opportunities. The app requires a CSV file with a specific structure, including the following columns:
+This is a simple Streamlit app that allows you to perform Montecarlo analysis on a dataset of opportunities. The app requires a CSV file with a specific structure, including the following columns:
 
 - Opportunity Code
 - Opportunity Description
@@ -11,15 +11,15 @@ This is a simple Streamlit app that allows you to perform bootstrap analysis on 
 - %
 - Estimated Closing Date
 
-The app will guide you through the process of loading the data, setting bootstrap parameters, running the bootstrap analysis, and displaying the results in both tabular and graphical formats.
+The app will guide you through the process of loading the data, setting Montecarlo parameters, running the Montecarlo analysis, and displaying the results in both tabular and graphical formats.
 
 ## Features
 
 - Load and display the dataset
-- Modify bootstrap parameters
-- Run bootstrap analysis
+- Modify Montecarlo parameters
+- Run Montecarlo analysis
 - Show dataset base statistics
-- Display histogram of bootstrapped probability distribution of total value
+- Display histogram of Montecarloped probability distribution of total value
 
 ## Installation
 
