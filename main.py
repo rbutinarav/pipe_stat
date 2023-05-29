@@ -4,18 +4,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-#ask user to load a dataset with the following structure:
-#Opportunity Code,Opportunity Description,Customer ID,Customer Description, Category, %, Estimated Closing Date
-#format is csv
+def get_risk_emoji(risk):
+    if risk > 80:
+        return '🔴'  # return a red circle emoji for very high risk
+    elif 50 < risk <= 80:
+        return '🟠'  # return a orange circle emoji for high risk
+    elif 20 < risk <= 50:
+        return '⚠️'  # return a warning emoji for medium risk
+    else:
+        return '✅'  # return a green check emoji for low risk
+    
 
 #inizialized the session state
 if 'dataset' not in st.session_state:
     st.session_state['dataset'] = None
 if 'projected_value' not in st.session_state:
     st.session_state['projected_value'] = None
+if 'category_values' not in st.session_state:
+    st.session_state['category_values'] = {}
 
 dataset = st.session_state['dataset']
 projected_value = st.session_state['projected_value']
+category_values = st.session_state['category_values']
 
 st.write ('Pipe Stat: This app will allow you to run a montecarlo analysis on a dataset of opportunities')
 #ask user to load the data
@@ -25,17 +35,17 @@ if load_data:
     dataset = st.file_uploader("Upload CSV", type=["csv"])
     #convert the above loaded file into a pandas dataframe
     
-    st.write('Dataset should have this struture: Opportunity Code,Opportunity Description,Customer ID,Customer Description, Category, Value, %, Estimated Closing Date')
+    st.write('Dataset should have this struture: Opportunity Code,Opportunity Description,Customer ID,Customer Description, Product Category, Value, %, Estimated Closing Date')
     st.write('Headers will be reformatted in anycase, based on the structure above')
 
     if dataset is not None:
         dataset = pd.read_csv(dataset)
-        #change the name of the columns based on their position as follows: Opportunity Code,Opportunity Description,Customer ID,Customer Description, Category, %, Estimated Closing Date
-        dataset.columns = ['Opportunity Code','Opportunity Description','Customer ID','Customer Description', 'Category', 'Value', '%', 'Estimated Closing Date']
+        #change the name of the columns based on their position as follows: Opportunity Code,Opportunity Description,Customer ID,Customer Description,Product Category,Value,%,Estimated Closing Date
+        dataset.columns = ['Opportunity Code','Opportunity Description','Customer ID','Customer Description','Product Category','Value','%','Estimated Closing Date']
         #calculate the weighted value
         dataset['WeightedValue'] = dataset['Value'] * dataset['%'] / 100
         st.session_state['dataset'] = dataset
-        #change the name of the columns
+        st.session_state['category_values'] = {cat: [] for cat in dataset['Product Category'].unique()} 
 
 
 #ask the user if want to see the dataset (check box)
@@ -48,7 +58,9 @@ if st.sidebar.checkbox('Show dataset'):
 #ask the user to modify the montecarlo parameters
 montecarlo_param = st.sidebar.checkbox('Montecarlo Parameters')
 if montecarlo_param:
-    # Define the number of iterations and the sample size
+    category_values = st.session_state['category_values']  # Fetch updated category_values from session state
+    total_values = []
+    dataset = st.session_state['dataset']
     #ask users to define the number of iterations
     iterations = st.number_input('Number of iterations', min_value=1, max_value=100000, value=10000, step=1)
     sample_size = len(dataset)
@@ -58,86 +70,113 @@ run_montecarlo = st.sidebar.button('Run Montecarlo')
 
 
 if run_montecarlo:
+    # Initialize a dictionary to hold the projected values for each category
+    st.session_state['category_values'] = {cat: [] for cat in dataset['Product Category'].unique()} 
+    st.session_state['total_values'] = []
+    # Initialize a dictionary to hold the projected values for each category
+    category_values = {cat: [] for cat in dataset['Product Category'].unique()} 
     total_values = []
-
-    dataset = st.session_state['dataset']
     
-    # Create a progress bar
     progress_bar = st.progress(0)
 
     for i in range(iterations):
-        total_value = 0
-        
+        # Initialize a dictionary to hold the total value for each category within the current simulation
+        category_totals = {cat: 0 for cat in dataset['Product Category'].unique()}
+
         for _, row in dataset.iterrows():
             value, probability = row['Value'], row['%'] / 100
-            
             if random.random() < probability:
-                total_value += value
+                category_totals[row['Product Category']] += value
                 
-        total_values.append(total_value)
+        for category, total in category_totals.items():
+            category_values[category].append(total)
+        
+        total_values.append(sum(category_totals.values()))
         st.session_state['projected_value'] = total_values
-
-        # Update the progress bar
+        st.session_state['category_values'] = category_values  # Store updated category_values back to session state
         progress_bar.progress((i + 1) / iterations)
-
-
-
-#ask user to show dataset base statistics
-if st.sidebar.checkbox('Show dataset base statistics'):
-    st.subheader('Dataset base statistics')
-    #st.write(dataset.describe())
-
-
-    # Calculate the statistics (e.g., mean, median, percentiles)
-    mean = np.mean(projected_value)
-    median = np.median(projected_value)
-    p5 = np.percentile(projected_value, 5)
-    p95 = np.percentile(projected_value, 95)
-    downside_risk = (mean - p5) / mean
-
-    #format in currency format
-    mean = "{:,.2f}".format(mean)
-    median = "{:,.2f}".format(median)
-    p5 = "{:,.2f}".format(p5)
-    p95 = "{:,.2f}".format(p95)
-    #formate downside risk in percentage
-    downside_risk = downside_risk * 100
-    downside_risk = "{:,.2f}".format(downside_risk)
-
-    #display basic statistics
-    #number of deals
-    st.write(f'Number of deals: {len(dataset)}')
-    #total nominal value of sales
-    st.write(f'Total nominal value of sales: {dataset["Value"].sum()}')
-    #totale weighted value of sales
-    st.write(f'Total weighted value of sales: {dataset["WeightedValue"].sum()}')
-    #confidence range of the weighted value of sales
-    st.write(f'Confidence range of the weighted value of sales: {p5} - {p95}')
-
-    st.write('-- additional statistics --')
-
-    # Display the statistics using Streamlit
-    st.write(f"Mean: {mean}")
-    st.write(f"Median: {median}")
-    st.write(f"5th percentile: {p5}")
-    st.write(f"95th percentile: {p95}")
-
-    # Plot the histogram of the total values
-    fig, ax = plt.subplots()
-    ax.hist(projected_value, bins=100, density=True, color='green', edgecolor='grey')
-    ax.set_xlabel('Projected Sales Value')
-    ax.set_ylabel('Probability Density')
-    #ax.set_title('montecarloped Probability Distribution of Total Value')
-    #set a title with littler font
-    ax.set_title('Distribution of Projected Sales Value', fontsize=10)
-
-    st.write(f'This means that there is a 95% chance that sales value of the pipeline will be more than {p5} and less than {p95}')
-
-    #calculate the difference between the mean and p5 in percentage and call it downside risk
+        st.session_state['total_values'] = total_values
     
-    st.write(f'This means that there is a 5% chance that sales value of the pipeline will be less than {downside_risk}% of the mean value of {mean}')
+
+if st.sidebar.checkbox('Show statistics'):
+    total_values = st.session_state['total_values']
+    category_values = st.session_state['category_values']
+    st.subheader('Product Category Statistics') 
+
+    # Initialize a list to hold the statistics for each category
+    stats_list = []
+
+    for category, values in category_values.items(): 
+        if len(values) > 0:
+            mean = np.mean(values) 
+            p5 = np.percentile(values, 5) 
+            p95 = np.percentile(values, 95)
+            number_of_deals = len(dataset[dataset['Product Category'] == category])
+            downside_risk = (mean - p5) / mean * 100
+
+            # Add a new dict to the list
+            stats_list.append({"Category": category,
+                            "Deals": number_of_deals,
+                            "Mean": "{:,.2f}".format(mean),
+                            "5th percentile": "{:,.2f}".format(p5),
+                            "95th percentile": "{:,.2f}".format(p95),
+                            "Downside risk (%)": "{:,.2f}".format(downside_risk),
+                            #add a column with the risk emoji using get_risk_emoji(risk):
+                            "Risk": get_risk_emoji(downside_risk)})
+        else:
+            # Handle case when there are no values
+            stats_list.append({"Category": category,
+                            "Mean": "N/A",
+                            "5th percentile": "N/A",
+                            "95th percentile": "N/A"})
+
+    # Calculate statistics for the total pipeline value across all simulations
+    mean = np.mean(total_values) 
+    p5 = np.percentile(total_values, 5) 
+    p95 = np.percentile(total_values, 95)
+    number_of_deals = len(dataset)  # Total number of deals in the pipeline
+    downside_risk = (mean - p5) / mean * 100 if mean > 0 else 0
+
+    stats_list.append({"Category": "Total",
+                    "Deals": number_of_deals,
+                    "Mean": "{:,.2f}".format(mean),
+                    "5th percentile": "{:,.2f}".format(p5),
+                    "95th percentile": "{:,.2f}".format(p95),
+                    "Downside risk (%)": "{:,.2f}".format(downside_risk),
+                    "Risk": get_risk_emoji(downside_risk)})
+
+    # Convert the list of dicts into a DataFrame
+    stats_df = pd.DataFrame(stats_list)
+
+    # Display the DataFrame
+    st.table(stats_df)
+
+
+if st.sidebar.checkbox('Show total distribution'): 
+    st.subheader('Total Distribution') 
+
+    fig, ax = plt.subplots()
+
+    weights = np.ones_like(total_values)/len(total_values)
+    ax.hist(total_values, bins=100, weights=weights, color='blue', alpha=0.7, edgecolor='black')
+    ax.set_xlabel('Projected Total Sales Value')
+    ax.set_ylabel('Probability')
+    ax.set_title('Distribution of Projected Total Sales Value', fontsize=12)
 
     st.pyplot(fig)
 
 
-    
+if st.sidebar.checkbox('Show total distribution by category'): 
+
+    for category, values in category_values.items(): 
+        if len(values) > 0:
+            fig, ax = plt.subplots()
+
+            weights = np.ones_like(values)/len(values)
+            ax.hist(values, bins=100, weights=weights, color='blue', alpha=0.7, edgecolor='black')
+            ax.set_xlabel('Projected Sales Value')
+            ax.set_ylabel('Probability')
+            ax.set_title(f'Distribution of Projected Sales Value for {category}', fontsize=12)
+
+            st.pyplot(fig)
+
