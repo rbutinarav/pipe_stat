@@ -1,51 +1,44 @@
-# Pipe Stat: Montecarlo Analysis for Sales Pipeline
+# Pipe Stat: Monte Carlo Analysis for Sales Pipelines
 
-This is a simple Streamlit app that allows you to perform Montecarlo analysis on a dataset of opportunities. The app requires a CSV file with a specific structure, including the following columns:
+Pipe Stat is an interactive Streamlit application that performs Monte Carlo simulations on a sales pipeline dataset. This application requires a CSV file with a specific structure, including:
 
 - Opportunity Code
 - Opportunity Description
 - Customer ID
 - Customer Description
-- Category
-- Value
-- %
+- Product Category
+- Deal Value
+- Deal Close Probability (%)
 - Estimated Closing Date
 
-The app will guide you through the process of loading the data, setting Montecarlo parameters, running the Montecarlo analysis, and displaying the results in both tabular and graphical formats.
+The application guides users through the process of data import, Monte Carlo simulation parameter setting, simulation execution, and result interpretation in both tabular and graphical formats.
 
 ## Features
 
-- Load and display the dataset
-- Modify Montecarlo parameters
-- Run Montecarlo analysis
-- Show dataset base statistics
-- Display histogram of Montecarloped probability distribution of total value
+- Import and visualize your sales pipeline data
+- Configure Monte Carlo simulation parameters
+- Perform Monte Carlo simulation to predict total sales 
+- Display basic statistical information about your data
+- Graphically visualize the simulated probability distribution of total value
 
 ## Installation
 
-To run this app, you will need Python and the following libraries installed:
+To run this application, you need Python installed along with several Python libraries, including streamlit, pandas, numpy, and matplotlib.
 
-- streamlit
-- pandas
-- numpy
-- matplotlib
-
-You can install the required libraries using pip:
+You can install these required libraries using pip:
 
 ```bash
-pip install streamlit pandas numpy matplotlib
+pip install -r requirements.txt
 ```
 
 ## Usage
 
-To run the app, use the following command in your terminal:
+To run the application, use the following command in your terminal:
 
 ```bash
-streamlit run app.py
+streamlit run main.py
 ```
-
-Replace `app.py` with the name of the script containing the Streamlit app code if necessary.
 
 ## Contributing
 
-Please feel free to submit issues or pull requests for improvements and bug fixes.
+Contributions to improve the functionality and user experience of Pipe Stat are always welcome. If you're interested in contributing, feel free to submit issues or pull requests for improvements and bug fixes. Your input and expertise are greatly appreciated.
