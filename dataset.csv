@@ -23,3 +23,43 @@ OPP021,Nanotech Suit,C001,Iron Man,Battle Gear,75000,85,2023-08-26
 OPP022,Web Fluid Refill,C002,Spider-Man,Maintenance,800,95,2023-08-31
 OPP023,Wing Suit Maintenance,C003,Falcon,Maintenance,3500,80,2023-09-05
 OPP024,Holographic Disguise,C004,Mystique,Stealth Tech,42000,80,2023-09-10
+OPP025,Psychic Defense Training,C010,Invisible Woman,Training,6500,75,2023-09-15
+OPP026,Arc Reactor Maintenance,C001,Iron Man,Maintenance,15000,90,2023-09-20
+OPP027,Web-Slinging Training,C002,Spider-Man,Training,2000,80,2023-09-25
+OPP028,Flight Suit Upgrade,C003,Falcon,Battle Gear,10000,70,2023-09-30
+OPP029,Stealth Field Generator,C004,Mystique,Stealth Tech,45000,85,2023-10-05
+OPP030,Vibranium Shield Upgrade,C005,Captain America,Battle Gear,7500,95,2023-10-10
+OPP031,Mjölnir Repairs,C006,Thor,Maintenance,18000,80,2023-10-15
+OPP032,Vibranium Suit Upgrade,C007,Black Panther,Battle Gear,75000,90,2023-10-20
+OPP033,Healing Factor Study,C008,Wolverine,Health,30000,75,2023-10-25
+OPP034,Archery Training,C009,Hawkeye,Training,3000,80,2023-10-30
+OPP035,Invisibility Training,C010,Invisible Woman,Training,7000,90,2023-11-05
+OPP036,Iron Man Suit Upgrade,C001,Iron Man,Battle Gear,85000,85,2023-11-10
+OPP037,Spider-Sense Training,C002,Spider-Man,Training,2500,80,2023-11-15
+OPP038,Wing Suit Upgrade,C003,Falcon,Battle Gear,12000,70,2023-11-20
+OPP039,Image Inducer,C004,Mystique,Stealth Tech,50000,85,2023-11-25
+OPP040,Vibranium Shield Customization,C005,Captain America,Battle Gear,10000,90,2023-12-01
+OPP041,Asgardian Armor,C006,Thor,Battle Gear,80000,80,2023-12-05
+OPP042,Black Panther Suit Maintenance,C007,Black Panther,Maintenance,20000,85,2023-12-10
+OPP043,Adamantium Extraction Study,C008,Wolverine,Health,35000,75,2023-12-15
+OPP044,Advanced Bow Upgrade,C009,Hawkeye,Gadgets,6000,80,2023-12-20
+OPP045,Force Field Study,C010,Invisible Woman,Health,8000,90,2023-12-25
+OPP046,Arc Reactor Efficiency Study,C001,Iron Man,Health,90000,85,2024-01-01
+OPP047,Web-Shooters Upgrade,C002,Spider-Man,Gadgets,5000,80,2024-01-06
+OPP048,Wing Suit Efficiency Study,C003,Falcon,Health,14000,70,2024-01-10
+OPP049,Stealth Suit Upgrade,C004,Mystique,Stealth Tech,55000,85,2024-01-15
+OPP050,Vibranium Shield Efficiency Study,C005,Captain America,Health,11500,90,2024-01-20
+OPP051,Odinforce Study,C006,Thor,Health,85000,80,2024-01-25
+OPP052,Black Panther Suit Upgrade,C007,Black Panther,Battle Gear,80000,85,2024-01-30
+OPP053,Adamantium Claws Upgrade,C008,Wolverine,Battle Gear,40000,75,2024-02-05
+OPP054,Advanced Quiver Upgrade,C009,Hawkeye,Gadgets,7000,80,2024-02-10
+OPP055,Invisibility Suit Maintenance,C010,Invisible Woman,Maintenance,9000,90,2024-02-15
+OPP056,Stark Tower Security System,C001,Iron Man,Gadgets,60000,30,2024-02-20
+OPP057,Web Shooter Calibration,C002,Spider-Man,Health,2000,40,2024-02-25
+OPP058,Advanced Flight Maneuvers,C003,Falcon,Training,8000,20,2024-03-02
+OPP059,Stealth Suit Calibration,C004,Mystique,Health,5000,35,2024-03-07
+OPP060,Ant-Man Suit,C006,Thor,Stealth Tech,100000,50,2024-03-12
+OPP061,Wakandan Outreach Program,C007,Black Panther,Training,30000,25,2024-03-17
+OPP062,Regeneration Boost,C008,Wolverine,Health,50000,10,2024-03-22
+OPP063,Advanced Fletching Techniques,C009,Hawkeye,Training,4000,45,2024-03-27
+OPP064,Telepathy Resistance Training,C010,Invisible Woman,Health,10000,30,2024-04-01
