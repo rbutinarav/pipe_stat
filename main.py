@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
+# Function to get risk emoji
 def get_risk_emoji(risk):
     if risk > 80:
         return '🔴'  # return a red circle emoji for very high risk
@@ -13,74 +14,37 @@ def get_risk_emoji(risk):
         return '⚠️'  # return a warning emoji for medium risk
     else:
         return '✅'  # return a green check emoji for low risk
-    
 
-#inizialized the session state
-if 'dataset' not in st.session_state:
-    st.session_state['dataset'] = None
-if 'projected_value' not in st.session_state:
-    st.session_state['projected_value'] = None
-if 'category_values' not in st.session_state:
-    st.session_state['category_values'] = {}
+# Function to initialize session state
+def init_session_state():
+    st.session_state.setdefault('dataset', None)
+    st.session_state.setdefault('projected_value', None)
+    st.session_state.setdefault('category_values', {})
 
-dataset = st.session_state['dataset']
-projected_value = st.session_state['projected_value']
-category_values = st.session_state['category_values']
-
-st.write ('Pipe Stat: This app will allow you to run a montecarlo analysis on a dataset of opportunities')
-#ask user to load the data
-load_data = st.sidebar.checkbox('Load Data')
-
-if load_data:
+# Function to load data
+def load_data():
     dataset = st.file_uploader("Upload CSV", type=["csv"])
-    #convert the above loaded file into a pandas dataframe
-    
-    st.write('Dataset should have this struture: Opportunity Code,Opportunity Description,Customer ID,Customer Description, Product Category, Value, %, Estimated Closing Date')
-    st.write('Headers will be reformatted in anycase, based on the structure above')
-
     if dataset is not None:
         dataset = pd.read_csv(dataset)
-        #change the name of the columns based on their position as follows: Opportunity Code,Opportunity Description,Customer ID,Customer Description,Product Category,Value,%,Estimated Closing Date
         dataset.columns = ['Opportunity Code','Opportunity Description','Customer ID','Customer Description','Product Category','Value','%','Estimated Closing Date']
-        #calculate the weighted value
         dataset['WeightedValue'] = dataset['Value'] * dataset['%'] / 100
         st.session_state['dataset'] = dataset
         st.session_state['category_values'] = {cat: [] for cat in dataset['Product Category'].unique()} 
+    return dataset
 
-
-#ask the user if want to see the dataset (check box)
-if st.sidebar.checkbox('Show dataset'):
+# Function to display dataset
+def display_dataset(dataset):
     st.subheader('Dataset')
-    dataset = st.session_state['dataset']
     st.write(dataset)
 
-
-#ask the user to modify the montecarlo parameters
-montecarlo_param = st.sidebar.checkbox('Montecarlo Parameters')
-if montecarlo_param:
-    category_values = st.session_state['category_values']  # Fetch updated category_values from session state
-    total_values = []
-    dataset = st.session_state['dataset']
-    #ask users to define the number of iterations
-    iterations = st.number_input('Number of iterations', min_value=1, max_value=100000, value=10000, step=1)
-    sample_size = len(dataset)
-
-#ask ths user if wants to run the Montacarlo
-run_montecarlo = st.sidebar.button('Run Montecarlo')
-
-
-if run_montecarlo:
-    # Initialize a dictionary to hold the projected values for each category
-    st.session_state['category_values'] = {cat: [] for cat in dataset['Product Category'].unique()} 
-    st.session_state['total_values'] = []
-    # Initialize a dictionary to hold the projected values for each category
+# Function to run montecarlo
+def run_montecarlo(iterations, dataset):
     category_values = {cat: [] for cat in dataset['Product Category'].unique()} 
     total_values = []
     
     progress_bar = st.progress(0)
 
     for i in range(iterations):
-        # Initialize a dictionary to hold the total value for each category within the current simulation
         category_totals = {cat: 0 for cat in dataset['Product Category'].unique()}
 
         for _, row in dataset.iterrows():
@@ -93,12 +57,13 @@ if run_montecarlo:
         
         total_values.append(sum(category_totals.values()))
         st.session_state['projected_value'] = total_values
-        st.session_state['category_values'] = category_values  # Store updated category_values back to session state
+        st.session_state['category_values'] = category_values
         progress_bar.progress((i + 1) / iterations)
-        st.session_state['total_values'] = total_values
-    
 
-if st.sidebar.checkbox('Show statistics'):
+    st.session_state['total_values'] = total_values
+
+# Function to display statistics
+def display_statistics(dataset):
     total_values = st.session_state['total_values']
     category_values = st.session_state['category_values']
     st.subheader('Product Category Statistics') 
@@ -112,7 +77,7 @@ if st.sidebar.checkbox('Show statistics'):
             p5 = np.percentile(values, 5) 
             p95 = np.percentile(values, 95)
             number_of_deals = len(dataset[dataset['Product Category'] == category])
-            downside_risk = (mean - p5) / mean * 100
+            downside_risk = (mean - p5) / mean * 100 if mean > 0 else 0
 
             # Add a new dict to the list
             stats_list.append({"Category": category,
@@ -152,7 +117,8 @@ if st.sidebar.checkbox('Show statistics'):
     st.table(stats_df)
 
 
-if st.sidebar.checkbox('Show total distribution'): 
+# Function to show total distribution
+def show_total_distribution(total_values):
     st.subheader('Total Distribution') 
 
     fig, ax = plt.subplots()
@@ -165,9 +131,8 @@ if st.sidebar.checkbox('Show total distribution'):
 
     st.pyplot(fig)
 
-
-if st.sidebar.checkbox('Show total distribution by category'): 
-
+# Function to show total distribution by category
+def show_total_distribution_by_category(category_values):
     for category, values in category_values.items(): 
         if len(values) > 0:
             fig, ax = plt.subplots()
@@ -180,3 +145,38 @@ if st.sidebar.checkbox('Show total distribution by category'):
 
             st.pyplot(fig)
 
+# Main program
+def main():
+    init_session_state()
+    dataset = None
+
+    st.write('Pipe Stat: This app will allow you to run a montecarlo analysis on a dataset of opportunities')
+
+    if st.sidebar.checkbox('Load Data'):
+        st.write('Dataset should have this struture: Opportunity Code,Opportunity Description,Customer ID,Customer Description, Product Category, Value, %, Estimated Closing Date')
+        st.write('Headers will be reformatted in anycase, based on the structure above')
+        dataset = load_data()
+
+    if st.sidebar.checkbox('Show dataset'):
+        display_dataset(st.session_state['dataset'])
+
+    if st.sidebar.checkbox('Montecarlo Parameters'):
+        iterations = st.sidebar.number_input('Number of iterations', min_value=1, max_value=100000, value=10000, step=1)
+    else:
+        iterations = 10000
+
+    if st.sidebar.button('Run Montecarlo'):
+        run_montecarlo(iterations, st.session_state['dataset'])
+
+    if st.sidebar.checkbox('Show statistics'):
+        display_statistics(st.session_state['dataset'])
+
+    if st.sidebar.checkbox('Show total distribution'): 
+        show_total_distribution(st.session_state['total_values'])
+
+    if st.sidebar.checkbox('Show total distribution by category'): 
+        show_total_distribution_by_category(st.session_state['category_values'])
+
+
+if __name__ == "__main__":
+    main()
