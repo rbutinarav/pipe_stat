@@ -177,6 +177,20 @@ def main():
     if st.sidebar.checkbox('Show total distribution by category'): 
         show_total_distribution_by_category(st.session_state['category_values'])
 
+    if st.sidebar.checkbox('Show Legend'):
+        st.markdown('''
+        ### Legend
+
+        - **Category**: The product category that the deal falls into.
+        - **Deals**: The total number of deals (or sales opportunities) currently open in this product category.
+        - **Mean**: The mean value of the deals in this category.
+        - **5th percentile**: The minimum value you can expect with a 95% confidence.
+        - **95th percentile**: The maximum value you can expect with a 95% confidence.
+        - **Downside risk (%)**: A measure of how much less the actual value could be compared to the mean value, with a 5% probability.
+        - **Risk**: A visual representation of the downside risk.
+        ''')
+
+
 
 if __name__ == "__main__":
     main()
