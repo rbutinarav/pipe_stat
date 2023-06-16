@@ -171,12 +171,6 @@ def main():
     if st.sidebar.checkbox('Show statistics'):
         display_statistics(st.session_state['dataset'])
 
-    if st.sidebar.checkbox('Show total distribution'): 
-        show_total_distribution(st.session_state['total_values'])
-
-    if st.sidebar.checkbox('Show total distribution by category'): 
-        show_total_distribution_by_category(st.session_state['category_values'])
-
     if st.sidebar.checkbox('Show Legend'):
         st.markdown('''
         ### Legend
@@ -190,7 +184,11 @@ def main():
         - **Risk**: A visual representation of the downside risk.
         ''')
 
+    if st.sidebar.checkbox('Show total distribution'): 
+        show_total_distribution(st.session_state['total_values'])
 
+    if st.sidebar.checkbox('Show total distribution by category'): 
+        show_total_distribution_by_category(st.session_state['category_values'])
 
 if __name__ == "__main__":
     main()
