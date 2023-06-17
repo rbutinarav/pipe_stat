@@ -1,1 +1,1 @@
-Category details are deleted if checkboxes are selected after running the montarlo simulation. Total is preserved.
+---all good---

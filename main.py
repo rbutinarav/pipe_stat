@@ -18,7 +18,6 @@ def get_risk_emoji(risk):
 # Function to initialize session state
 def init_session_state():
     st.session_state.setdefault('dataset', None)
-    st.session_state.setdefault('projected_value', None)
     st.session_state.setdefault('category_values', {})
 
 # Function to load data
@@ -56,10 +55,9 @@ def run_montecarlo(iterations, dataset):
             category_values[category].append(total)
         
         total_values.append(sum(category_totals.values()))
-        st.session_state['projected_value'] = total_values
-        st.session_state['category_values'] = category_values
         progress_bar.progress((i + 1) / iterations)
 
+    st.session_state['category_values'] = category_values
     st.session_state['total_values'] = total_values
 
 # Function to display statistics
