@@ -15,10 +15,15 @@ def get_risk_emoji(risk):
     else:
         return '✅'  # return a green check emoji for low risk
 
-# Function to initialize session state
+# Inizialize session state variables
 def init_session_state():
-    st.session_state.setdefault('dataset', None)
-    st.session_state.setdefault('category_values', {})
+    if 'dataset' not in st.session_state:
+        st.session_state['dataset'] = None
+    if 'category_values' not in st.session_state:
+        st.session_state['category_values'] = None
+    if 'total_values' not in st.session_state:
+        st.session_state['total_values'] = None
+
 
 # Function to load data
 def load_data():
@@ -28,7 +33,6 @@ def load_data():
         dataset.columns = ['Opportunity Code','Opportunity Description','Customer ID','Customer Description','Product Category','Value','%','Estimated Closing Date']
         dataset['WeightedValue'] = dataset['Value'] * dataset['%'] / 100
         st.session_state['dataset'] = dataset
-        st.session_state['category_values'] = {cat: [] for cat in dataset['Product Category'].unique()} 
     return dataset
 
 # Function to display dataset
@@ -145,8 +149,8 @@ def show_total_distribution_by_category(category_values):
 
 # Main program
 def main():
+
     init_session_state()
-    dataset = None
 
     st.write('Pipe Stat: This app will allow you to run a montecarlo analysis on a dataset of opportunities')
 
